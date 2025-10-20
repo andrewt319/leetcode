@@ -1,1 +1,1 @@
-# leetcode_daily_problems
+# my leetcode solutions
