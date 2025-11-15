@@ -1,5 +1,5 @@
-from collections import defaultdict
 import bisect
+from collections import defaultdict
 class TimeMap:
 
     def __init__(self):
@@ -9,7 +9,8 @@ class TimeMap:
         self.map[key].append((timestamp, value))
 
     def get(self, key: str, timestamp: int) -> str:
-        idx = bisect.bisect_right(self.map[key], (timestamp, '{'))
+        # idx = bisect.bisect_right(self.map[key], (timestamp, '{'))
+        idx = bisect.bisect_right(self.map[key], timestamp, key=lambda x:x[0])
         return self.map[key][idx - 1][1] if idx > 0 else ""
 
 
