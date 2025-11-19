@@ -1,30 +1,31 @@
 from collections import deque
 class Solution:
     def orangesRotting(self, grid: List[List[int]]) -> int:
-        def isValid(x, y):
-            return 0 <= x < len(grid) and 0 <= y < len(grid[0]) and grid[x][y] == 1
-        
-        time = countFresh = 0
         q = deque()
+        numFreshOranges = time = 0
+        n, m = len(grid), len(grid[0])
+        directions = [(-1, 0), (1, 0), (0, 1), (0, -1)]
 
-        for i in range(len(grid)):
-            for j in range(len(grid[0])):
+        for i in range(n):
+            for j in range(m):
                 if grid[i][j] == 2:
                     q.append((i, j))
                 elif grid[i][j] == 1:
-                    countFresh += 1
-
-        while q:
-            didInfect = False
-            for _ in range(len(q)):
-                currX, currY = q.popleft()
-    
-                for dx, dy in [(-1, 0), (1, 0), (0, 1), (0, -1)]:
-                    if isValid(currX + dx, currY + dy):
-                        countFresh -= 1
-                        grid[currX + dx][currY + dy] = 2
-                        didInfect = True
-                        q.append((currX + dx, currY + dy))    
-            time += didInfect
+                    numFreshOranges += 1
         
-        return time if countFresh == 0 else -1
+        while q:
+            for _ in range(len(q)):
+                r, c = q.popleft()
+
+                if grid[r][c] == 1:
+                    numFreshOranges -= 1
+                    grid[r][c] = 2
+                if numFreshOranges == 0:
+                    return time
+
+                for dx, dy in directions:
+                    if 0 <= r + dx < n and 0 <= c + dy < m and grid[r + dx][c + dy] == 1:
+                        q.append((r + dx, c + dy))
+            time += 1
+
+        return -1 if numFreshOranges > 0 else 0
