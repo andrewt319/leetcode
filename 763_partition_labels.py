@@ -1,14 +1,15 @@
 class Solution:
     def partitionLabels(self, s: str) -> List[int]:
-        lastIdx = {c: i for i, c in enumerate(s)}
-        furthest = left = 0
+        charToLatestIdx = [0] * 26
+        for i, c in enumerate(s):
+            charToLatestIdx[ord(c) - ord('a')] = i
+        
+        farthestIdx = leftIdx = 0
         sol = []
-
-        for i in range(len(s)):
-            furthest = max(furthest, lastIdx[s[i]])
-
-            if i == furthest:
-                sol.append(furthest - left + 1)
-                left = furthest + 1
-
+        for i, c in enumerate(s):
+            farthestIdx = max(farthestIdx, charToLatestIdx[ord(c) - ord('a')])
+            if i == farthestIdx:
+                sol.append(i - leftIdx + 1)
+                leftIdx = i + 1
+        
         return sol
